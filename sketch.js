@@ -1,4 +1,5 @@
 function preload(){
+  loadedAllFiles = false;
   getSheeped = loadImage('getSheeped.png')
 
   sheepHead = loadImage('sheepHead.png')
@@ -11,6 +12,7 @@ function preload(){
   raidCharacters = loadImage('raid_characters.jpg')
 }
 function setup() {
+  loadedAllFiles = true;
   myCanvas = createCanvas(800,700)
   myCanvas.id('demo')
   imageMode(CENTER,CENTER)
@@ -65,7 +67,7 @@ function updateCursor(){
 }
 
 function mouseClicked(){
-  if(collidePointRect( mouseX, mouseY, width/2 - (searchW/2), 237, searchW, searchH ) && animationTimer == -1){
+  if(loadedAllFiles && collidePointRect( mouseX, mouseY, width/2 - (searchW/2), 237, searchW, searchH ) && animationTimer == -1){
     animationTimer = 0;
     dubstep.play();
   }
