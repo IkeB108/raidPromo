@@ -1,15 +1,18 @@
 function preload(){
   loadedAllFiles = false;
-  getSheeped = loadImage('getSheeped.png')
+  /*getSheeped = loadImage('getSheeped.png')
 
   sheepHead = loadImage('sheepHead.png')
   sheepRear = loadImage('sheepRear.png')
   sheepSide = loadImage('sheepSide.png')
   vignette = loadImage('vignette.png')
 
-  dubstep = loadSound('sheepDubstep.mp3')
+
   raidLogo = loadImage('raidlogo.png')
-  raidCharacters = loadImage('raid_characters.jpg')
+  raidCharacters = loadImage('raid_characters.jpg')*/
+
+  raidSprite = loadImage('raidSprite.png')
+  dubstep = loadSound('sheepDubstep.mp3')
 }
 function setup() {
   loadedAllFiles = true;
@@ -19,9 +22,6 @@ function setup() {
   angleMode(DEGREES)
   textAlign(CENTER,CENTER)
   smooth()
-  shirtScale = 0.24
-  shirtSpace = 150;
-  shirtDown = 100;
 
   searchW = 600;
   searchH = 35;
@@ -39,12 +39,14 @@ function setup() {
 
 function draw() {
   background(0)
-  image(raidLogo, width/2, 100, raidLogo.width * 0.09, raidLogo.height * 0.09)
+  //image(raidLogo, width/2, 100, raidLogo.width * 0.09, raidLogo.height * 0.09)
+  drawSprite('raidLogo', width/2, 100, 0.6)
   fill(255); textSize(17)
   if(animationTimer > -1)fill(120)
   text('you really want to play this game?', width/2, 200)
 
-  image(raidCharacters, width/2, 500)
+  //image(raidCharacters, width/2, 500)
+  drawSprite('raidCharacters', width/2, 500, 1.3)
   fill(70); noStroke();
   if(collidePointRect( mouseX, mouseY, width/2 - (searchW/2), 237, searchW, searchH ) && animationTimer == -1){fill(160)}
 
@@ -113,33 +115,37 @@ function updateAnimation(){
         flyingSheep[i].yvel += 0.5;
         flyingSheep[i].x += flyingSheep[i].xvel;
         flyingSheep[i].y += flyingSheep[i].yvel;
-        image(sheepSide, flyingSheep[i].x, flyingSheep[i].y, sheepSide.width * 0.05, sheepSide.height * 0.05)
+        //image(sheepSide, flyingSheep[i].x, flyingSheep[i].y, sheepSide.width * 0.05, sheepSide.height * 0.05)
+        drawSprite('sheepSide', flyingSheep[i].x, flyingSheep[i].y, 0.3)
       }
 
     }
-    image(vignette, width/2, height/2, width, height)
+    //image(vignette, width/2, height/2, width, height)
+    drawSprite('vignette',width/2,height/2,1)
 
     if( (withinFlashRange(animationTimer) && frameCount % 2 == 0) || !withinFlashRange(animationTimer) )
-    image(getSheeped, width/2, 150, getSheeped.width * getSheepedScale, getSheeped.height * getSheepedScale);
-
+    //image(getSheeped, width/2, 150, getSheeped.width * getSheepedScale, getSheeped.height * getSheepedScale);
+    drawSprite('getSheeped', width/2, 150, 0.55)
     push();
     translate(width * (1/4) ,height/2)
     rotate(animationTimer%360)
     scale(0.5)
-    image(sheepHead, 0, 0)
+    //image(sheepHead, 0, 0)
+    drawSprite('sheepHead',0,0,1.7)
     pop();
 
     push();
     translate(width * (3/4) ,height/2)
     rotate(animationTimer%360)
     scale(0.5)
-    image(sheepHead, 0, 0)
+    //image(sheepHead, 0, 0)
+    drawSprite('sheepHead',0,0,1.7)
     pop();
 
 
     var sx = (width-200)/4
-    var iw = sheepRear.width
-    var ih = sheepRear.height
+    //var iw = sheepRear.width
+    //var ih = sheepRear.height
     var is = 0.5 * ( 1 + (animationTimer % 40)/210 )
     var n = 1;
     if(animationTimer % 80 < 40)n = -1;
@@ -147,7 +153,8 @@ function updateAnimation(){
       push();
       translate(i * sx + 100, 550)
       scale(is*n, is)
-      image(sheepRear, 0, 0)
+      //image(sheepRear, 0, 0)
+      drawSprite('sheepRear',0,0,1.65)
       pop();
     }
 
@@ -162,4 +169,28 @@ function updateAnimation(){
 function withinFlashRange(n){
   return (n%90) < 20
   //return ( within(n, 0, 20) || within(n, 60, 80) || within(n, 120, 140) )
+}
+
+function drawSprite(name, x, y, s){
+  var n = sp(name)
+  if(name == 'vignette')image(raidSprite, width/2,height/2, width, height, n[0], n[1]+1, n[2]-1, n[3]-2)
+  else image(raidSprite, x, y, n[2]*s, n[3]*s, n[0], n[1], n[2], n[3])
+}
+function sp(name){
+  switch(name){
+    case 'sheepSide':
+    return [187, 0, 221, 228]
+    case 'vignette':
+    return [0, 860, 174, 174]
+    case 'getSheeped':
+    return [0, 703, 862, 150]
+    case 'raidCharacters':
+    return [0, 511, 331, 186]
+    case 'sheepHead':
+    return [2, 244, 240, 263]
+    case 'sheepRear':
+    return [2, 0, 181, 244]
+    case 'raidLogo':
+    return [408, 0, 592, 304]
+  }
 }
